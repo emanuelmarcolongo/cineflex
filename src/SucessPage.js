@@ -3,24 +3,25 @@ import styled from "styled-components"
 
 
 
-export default function SucessPage() {
+export default function SucessPage({ data }) {
+    console.log(data)
     return (
         <>
             <Info>Pedido feito com sucesso!</Info>
             <TicketInfo>
                 <Negrito>Filme e sessão</Negrito>
-                <p>Shrek</p>
-                <p>24/06/2021    15h</p>
+                <p>{data.title}</p>
+                <p>{data.date}  -  {data.day}</p>
+                <p>Horário: {data.hour} </p>
                 <Negrito>Ingressos</Negrito>
-                <p>Assento 15</p>
-                <p>Assento 16</p>
+                {data.seats.map((seat) => <p key={seat}>Assento {seat}</p>)}
                 <Negrito>Comprador</Negrito>
-                <p>Joaozinho56</p>
+                <p>{data.buyer}</p>
             </TicketInfo>
 
             <DivReservar>
                 <Link to="/">
-                <Reservar > Voltar para home</Reservar>
+                    <Reservar > Voltar para home</Reservar>
                 </Link>
             </DivReservar>
 
@@ -41,15 +42,15 @@ const Info = styled.p`
     margin-bottom: 25px;
 
 `
-
 const TicketInfo = styled.div`
     color: #293845;
+    width: 375px;
     font-family: 'Roboto', sans-serif;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    justify-content: flex-start;
-    margin-left: 29px;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
     p {
         font-size: 22px;
     }
@@ -63,13 +64,15 @@ const Negrito = styled.p`
 
 
 `
-
 const DivReservar = styled.div`
     width: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-top: 35px;
+    a {
+        text-decoration: none;
+    }
 `
 const Reservar = styled.button`
     width: 225px;

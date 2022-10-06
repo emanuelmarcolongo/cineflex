@@ -1,24 +1,36 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import {  useNavigate, useParams } from 'react-router-dom';
 import Loading from './Loading';
 
 
-export default function SeatPage() {
+export default function SeatPage({data}) {
     const { idSessao } = useParams();
     const [seats, setSeats] = useState([]);
     const [movieInfo, setMovieInfo] = useState([]);
     const [selectedSeats, setSelectedSeats] = useState([])
     const [name, setName] = useState("");
-    const [sendoRequest, setSendRequest] = useState({})
     const [cpf, setCpf] = useState("");
+    const [seatName, setSeatName] = useState([]);
+    const navigate = useNavigate();
+    console.log(movieInfo)
 
-
-    function reservarAssentos () {
-        const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", {ids: selectedSeats, name: name, cpf:cpf})
-        promise.then((res)=> {console.log(res.config)})
-        promise.catch((err) => {console.log(err.response.data)})
+    function reservarAssentos(e) {
+        e.preventDefault();
+        if (selectedSeats === undefined || selectedSeats ===null || selectedSeats.length === 0 ) {
+            alert ("Você precisa escolher ao menos um assento disponível")
+            return;
+        }
+        
+        data.date = (movieInfo.day.date)
+        data.day = (movieInfo.day.weekday)
+        data.hour = (movieInfo.name)
+        data.buyer = (name)
+        data.seats  = (seatName)
+        const promise = axios.post("https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many", { ids: selectedSeats, name: name, cpf: cpf })
+        promise.then((res) => { navigate("/sucess") })
+        promise.catch((err) => { alert("Ocorreu um erro, tente novamente") })
     }
 
     const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`)
@@ -44,10 +56,13 @@ export default function SeatPage() {
     return (
         <>
             <Info>Selecione o(s) assento(s)</Info>
+
             <Assentos>
-                {seats.map((assento, i) => <Seat key={assento.id} selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} id={seats[i].id} name={seats[i].name} isAvailable={seats[i].isAvailable} seats={seats} />)}
+                {seats.map((assento, i) => <Seat key={assento.id} setSeatName={setSeatName}  seatName={seatName} selectedSeats={selectedSeats} setSelectedSeats={setSelectedSeats} id={seats[i].id} name={seats[i].name} isAvailable={seats[i].isAvailable} seats={seats} />)}
 
             </Assentos>
+
+
             <SeatsInfo>
                 <div>
                     <Selecionado />
@@ -63,16 +78,17 @@ export default function SeatPage() {
                 </div>
             </SeatsInfo>
 
-            <BuyerInfo>
-                <p>Nome do comprador</p>
-                <input type="text" onChange={(e) => setName(e.target.value)} placeholder='Digite seu nome...'></input>
-                <p>CPF do comprador</p>
-                <input type="text" onChange={(e) => setCpf(e.target.value)} placeholder='Digite seu CPF...'></input>
+            <BuyerInfo  onSubmit={reservarAssentos}>
+                <label>Nome do comprador</label>
+                <input required type="text" onChange={(e) => setName(e.target.value)} placeholder='Digite seu nome...'></input>
+                <label>CPF do comprador</label>
+                <input required  type="text" onChange={(e) => setCpf(e.target.value)} placeholder='Digite seu CPF...'></input>
+                <DivReservar>
+                    <Reservar type="submit"> Reservar assento(s)</Reservar>
+                </DivReservar>
             </BuyerInfo>
 
-            <DivReservar>
-                <Reservar onClick={() => reservarAssentos()}> Reservar assento(s)</Reservar>
-            </DivReservar>
+
 
 
 
@@ -83,8 +99,7 @@ export default function SeatPage() {
                 <div>
                     <p>{movieInfo.movie.title}</p>
                     <div>
-                        <p>{movieInfo.day.weekday}</p>
-                        <p>{movieInfo.day.date}</p>
+                        <p>{movieInfo.day.weekday} - {movieInfo.name}</p>
                     </div>
                 </div>
             </Footer>
@@ -93,7 +108,7 @@ export default function SeatPage() {
 
 }
 
-function Seat({ selectedSeats, setSelectedSeats, id, name, isAvailable }) {
+function Seat({ setSeatName, seatName, selectedSeats, setSelectedSeats, id, name, isAvailable }) {
     const [selected, setSelected] = useState(false);
 
     function clickSeat(nome, id) {
@@ -106,10 +121,15 @@ function Seat({ selectedSeats, setSelectedSeats, id, name, isAvailable }) {
 
             setSelectedSeats([...selectedSeats, id])
             setSelected(true);
+            setSeatName([...seatName, nome])
         }
         if (selectedSeats.includes(id)) {
-            const novoArray = selectedSeats.filter((i) => i !== id);
-            setSelectedSeats([...novoArray])
+            const newSeatsIds = selectedSeats.filter((i) => i !== id);
+            const newSeatNames = seatName.filter((i) => i !== nome);
+
+
+            setSelectedSeats([...newSeatsIds])
+            setSeatName([...newSeatNames])
             setSelected(false);
         }
 
@@ -156,18 +176,18 @@ const Assento = styled.div`
     justify-content: center;
     box-sizing: border-box;
     border-radius: 12px;
-    margin: 18px 7px 0 0;
+    margin: 18px 9px 0 0;
     background-color: ${props => (props.isAvailable) ? (props.selected ? "#1AAE9E" : "#C3CFD9") : "#FBE192"};
     border: ${props => (props.isAvailable) ? (props.selected ? "1px solid #0E7D71" : "1px solid #808F9D") : "1px solid #F7C52B"};
     font-size: 11px;
 `
+
 const Assentos = styled.div`
+    width: 355px;
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    margin-left: 20px;
-    margin-bottom: 10px;
-
+    margin: 0 auto;
 `
 const MovieContainer = styled.div`
     width: 64px;
@@ -187,6 +207,7 @@ const MovieContainer = styled.div`
 const SeatsInfo = styled.div`
     font-family: 'Roboto', sans-serif;
     display: flex;
+    width: 375px;
     margin: 25px auto;
     align-items: center;
     justify-content: space-evenly;
@@ -227,7 +248,7 @@ const Selecionado = styled.div`
     border: 1px solid #0E7D71;
     font-size: 13px;
 `
-const BuyerInfo = styled.div`
+const BuyerInfo = styled.form`
     display: flex;
     flex-direction: column;
     align-items: center;

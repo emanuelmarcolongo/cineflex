@@ -5,10 +5,11 @@ import Loading from './Loading';
 import { Link, useParams } from 'react-router-dom';
 
 
-export default function SessionPage() {
+export default function SessionPage({data}) {
     const { idFilme } = useParams();
     const [session, setSession] = useState([]);
     const [movieInfo, setMovieInfo] = useState({})
+    data.title = movieInfo.title;
 
     const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`)
 
@@ -16,7 +17,6 @@ export default function SessionPage() {
         promise.then(response => {
             setSession(response.data.days);
             setMovieInfo(response.data)
-
         })
     }, [])
 
@@ -91,7 +91,9 @@ const Showtime = styled.div`
 
 const Schedule = styled.div`
     display: flex;
-
+    a {
+        text-decoration: none;
+    }
 `
 const MoviePreview = styled.div`
     font-family: 'Roboto', sans-serif;

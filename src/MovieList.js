@@ -53,12 +53,15 @@ const Movies = styled.div`
 `
 
 const Info = styled.p`
-    color: #293845;
+    color: #247A6B;
     font-family: 'Roboto', sans-serif;
+    font-weight: 700;
     font-size: 24px;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: center;
     height: 110px;
+    margin-bottom: 25px;
+
 `
