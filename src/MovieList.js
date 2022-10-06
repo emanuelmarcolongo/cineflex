@@ -1,38 +1,31 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-
-
+import { Link, useParams } from 'react-router-dom';
 
 
 export default function MovieList({ filmes }) {
 
     return (
         <>
-        <Info>Selecione o Filme</Info>
-        <Movies>
-            {filmes.map((item) => <Movie  key={item.id} filmes={item} />)}
-            {/* <Movie filmes={filmes} /> */}
-        </Movies>
+            <Info>Selecione o Filme</Info>
+            <Movies>
+                {filmes.map((item) => <Movie key={item.id} filmes={item} />)}
+                {/* <Movie filmes={filmes} /> */}
+            </Movies>
         </>
     )
 }
 
-function Movie({filmes}) {
-
-    function chooseMovie (parametro) {
-        const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${parametro}/showtimes`)
-            promise.then(resposta => {
-               console.log(resposta.data)
-            })
-    }
-
+function Movie({ filmes }) {
 
     return (
         <>
-            <MovieContainer onClick={() => chooseMovie(filmes.id)}>
-                <MoviePoster  src={filmes.posterURL} alt="Poster do Filme" />
-            </MovieContainer>
+            <Link to={`/sessoes/${filmes.id}`}>
+                <MovieContainer >
+                    <MoviePoster src={filmes.posterURL} alt="Poster do Filme" />
+                </MovieContainer>
+            </Link>
         </>
     )
 }
@@ -49,7 +42,6 @@ const MovieContainer = styled.div`
     justify-content: center;
     margin: 5px 15px;
 `
-
 
 const MoviePoster = styled.img`
     width: 129px;
@@ -72,4 +64,3 @@ const Info = styled.p`
     justify-content: center;
     height: 110px;
 `
-        
