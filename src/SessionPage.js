@@ -1,9 +1,8 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import MovieList from './MovieList';
 import Loading from './Loading';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 
 
 export default function SessionPage() {
@@ -11,7 +10,6 @@ export default function SessionPage() {
     const [session, setSession] = useState([]);
     const [movieInfo, setMovieInfo] = useState({})
 
-    console.log(movieInfo)
     const promise = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`)
 
     useEffect(() => {
@@ -24,7 +22,7 @@ export default function SessionPage() {
 
 
     if (session.length === 0 || session === undefined || session === null) {
-        return <Loading src="https://upload.wikimedia.org/wikipedia/commons/b/b1/Loading_icon.gif?20151024034921" alt="Loading Gif" />;
+        return <Loading />;
 
     }
 
@@ -44,13 +42,18 @@ export default function SessionPage() {
 
 
 function Session({ day, weekday, showtime }) {
-
     return (
         <Sessao>
             <p>{weekday} - {day}</p>
             <Schedule>
-                {/* <Showtime > ola </Showtime> */}
-                {showtime.map((item, idx) => <Showtime key={idx}> {item.name} </Showtime>)}
+                {showtime.map((item, idx) =>
+                    <Link to={`/assentos/${item.id}`}>
+                      <Showtime key={idx}> {item.name} </Showtime>
+                    </Link>
+              
+                
+                )
+                }
             </Schedule>
 
         </Sessao>
@@ -93,7 +96,7 @@ const Schedule = styled.div`
 const MoviePreview = styled.div`
     font-family: 'Roboto', sans-serif;
     display: flex;
-    background-color: #9EADBA;
+    background-color: #DFE6ED;
     align-items: center;
     p {
         color: #293845;

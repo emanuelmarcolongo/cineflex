@@ -1,8 +1,9 @@
 import styled from "styled-components";
+import loading from "./assets/loading.gif"
 
 export default function Loading () {
     return (
-        <LoadGif src="https://media3.giphy.com/media/3oEjI6SIIHBdRxXI40/200.gif" alt="Loading Page"/>
+        <LoadGif src={loading} alt="Loading Page"/>
     )
 }
 
@@ -12,5 +13,5 @@ const LoadGif = styled.img `
     justify-content: center;
     width: 200px;
     height: 200px;
-    margin: 30% auto; 
+    margin: 40% auto; 
 `
