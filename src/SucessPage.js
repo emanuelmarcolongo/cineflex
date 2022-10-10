@@ -8,20 +8,20 @@ export default function SucessPage({ data }) {
     return (
         <>
             <Info>Pedido feito com sucesso!</Info>
-            <TicketInfo>
+            <TicketInfo data-identifier="movie-session-infos-reserve-finished" >
                 <Negrito>Filme e sessão</Negrito>
                 <p>{data.title}</p>
                 <p>{data.date}  -  {data.day}</p>
                 <p>Horário: {data.hour} </p>
                 <Negrito>Ingressos</Negrito>
-                {data.seats.map((seat) => <p key={seat}>Assento {seat}</p>)}
+                {data.seats.map((seat) => <p data-identifier="seat-infos-reserve-finished" key={seat}>Assento {seat}</p>)}
                 <Negrito>Comprador</Negrito>
-                <p>{data.buyer}</p>
+                <p data-identifier="buyer-infos-reserve-finished">{data.buyer}</p>
             </TicketInfo>
 
             <DivReservar>
                 <Link to="/">
-                    <Reservar > Voltar para home</Reservar>
+                    <Reservar data-identifier="back-to-home-btn" > Voltar para home</Reservar>
                 </Link>
             </DivReservar>
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Link, useParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 
 export default function MovieList({ filmes }) {
@@ -21,7 +21,7 @@ function Movie({ filmes }) {
         <>
             <Link to={`/sessoes/${filmes.id}`}>
                 <MovieContainer >
-                    <MoviePoster src={filmes.posterURL} alt="Poster do Filme" />
+                    <MoviePoster data-identifier="movie-outdoor" src={filmes.posterURL} alt="Poster do Filme" />
                 </MovieContainer>
             </Link>
         </>

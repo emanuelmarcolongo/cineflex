@@ -32,7 +32,7 @@ export default function SessionPage({data}) {
             {session.map((session, idx) => <Session key={idx} day={session.date} weekday={session.weekday} showtime={session.showtimes} />)}
             <MoviePreview >
                 <MovieContainer>
-                    <img src={movieInfo.posterURL} />
+                    <img data-identifier="movie-img-preview" src={movieInfo.posterURL} />
                 </MovieContainer>
                 <p>{movieInfo.title}</p>
             </MoviePreview>
@@ -43,12 +43,12 @@ export default function SessionPage({data}) {
 
 function Session({ day, weekday, showtime }) {
     return (
-        <Sessao>
-            <p>{weekday} - {day}</p>
-            <Schedule>
+        <Sessao >
+            <p data-identifier="session-date">{weekday} - {day}</p>
+            <Schedule >
                 {showtime.map((item, idx) =>
                     <Link to={`/assentos/${item.id}`}>
-                      <Showtime key={idx}> {item.name} </Showtime>
+                      <Showtime data-identifier="hour-minute-btn" key={idx}> {item.name} </Showtime>
                     </Link>
               
                 
@@ -61,6 +61,7 @@ function Session({ day, weekday, showtime }) {
 }
 const Info = styled.p`
     color: #293845;
+    width: 375px;
     font-family: 'Roboto', sans-serif;
     font-size: 24px;
     margin: 0 auto;
@@ -73,6 +74,10 @@ const Info = styled.p`
 const Sessao = styled.div`
     width: 350px;
     margin-left: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
 `
 
 const Showtime = styled.div`
@@ -100,6 +105,7 @@ const MoviePreview = styled.div`
     display: flex;
     background-color: #DFE6ED;
     align-items: center;
+    justify-content: center;
     p {
         color: #293845;
         font-size: 26px;

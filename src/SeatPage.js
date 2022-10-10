@@ -22,7 +22,7 @@ export default function SeatPage({data}) {
             alert ("Você precisa escolher ao menos um assento disponível")
             return;
         }
-        
+
         data.date = (movieInfo.day.date)
         data.day = (movieInfo.day.weekday)
         data.hour = (movieInfo.name)
@@ -66,25 +66,25 @@ export default function SeatPage({data}) {
             <SeatsInfo>
                 <div>
                     <Selecionado />
-                    <p>Selecionado</p>
+                    <p data-identifier="seat-selected-subtitle" >Selecionado</p>
                 </div>
                 <div>
                     <Disponviel />
-                    <p>Disponivel</p>
+                    <p data-identifier="seat-available-subtitle" >Disponivel</p>
                 </div>
                 <div>
                     <Indisponivel />
-                    <p>Indisponivel</p>
+                    <p data-identifier="seat-unavailable-subtitle">Indisponivel</p>
                 </div>
             </SeatsInfo>
 
             <BuyerInfo  onSubmit={reservarAssentos}>
                 <label>Nome do comprador</label>
-                <input required type="text" onChange={(e) => setName(e.target.value)} placeholder='Digite seu nome...'></input>
+                <input required type="text" data-identifier="buyer-name-input" onChange={(e) => setName(e.target.value)} placeholder='Digite seu nome...'></input>
                 <label>CPF do comprador</label>
-                <input required  type="text" onChange={(e) => setCpf(e.target.value)} placeholder='Digite seu CPF...'></input>
+                <input required  type="text"  data-identifier="buyer-cpf-input" onChange={(e) => setCpf(e.target.value)} placeholder='Digite seu CPF...'></input>
                 <DivReservar>
-                    <Reservar type="submit"> Reservar assento(s)</Reservar>
+                    <Reservar data-identifier="reservation-btn" type="submit"> Reservar assento(s)</Reservar>
                 </DivReservar>
             </BuyerInfo>
 
@@ -94,9 +94,9 @@ export default function SeatPage({data}) {
 
             <Footer >
                 <MovieContainer>
-                    <img src={movieInfo.movie.posterURL} />
+                    <img data-identifier="movie-img-preview" src={movieInfo.movie.posterURL} />
                 </MovieContainer>
-                <div>
+                <div data-identifier="movie-and-session-infos-preview">
                     <p>{movieInfo.movie.title}</p>
                     <div>
                         <p>{movieInfo.day.weekday} - {movieInfo.name}</p>
@@ -137,7 +137,7 @@ function Seat({ setSeatName, seatName, selectedSeats, setSelectedSeats, id, name
     }
 
     return (
-        <Assento onClick={() => clickSeat(name, id)} selected={selected} isAvailable={isAvailable}>{name}</Assento>
+        <Assento data-identifier="seat" onClick={() => clickSeat(name, id)} selected={selected} isAvailable={isAvailable}>{name}</Assento>
     )
 }
 
@@ -250,11 +250,15 @@ const Selecionado = styled.div`
 `
 const BuyerInfo = styled.form`
     display: flex;
+    width: 375px;
+    margin: 0 auto;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     font-family: 'Roboto', sans-serif;
-    p {
+    label {
+        display : flex;
+        align-items: flex-start;
         text-align: left;
         color: #293845;
         font-size: 18px;
@@ -262,12 +266,17 @@ const BuyerInfo = styled.form`
     }
     input {
         font-family: 'Roboto', sans-serif;
-        width: 327px;
+        width: 375px;
         height: 51px;
         border-radius: 3px;
         border: 1px solid #D5D5D5;
         background-color: white;
         margin-bottom: 15px;
+        ::placeholder {
+            color: #AAAAAF;
+            font-style: italic;
+            font-size: 18px;
+        }
     }
 `
 const DivReservar = styled.div`
